@@ -1,0 +1,35 @@
+txconformal/
+  __init__.py
+  api.py
+
+  features/
+    __init__.py
+    providers.py      # builds φ(X) from predictions, quantile bins, embeddings
+    quantiles.py      # decile/bin features (union of calib+test)
+
+  shift/
+    __init__.py
+    entropy_balancing.py  # refactor of your ebal
+    retries.py            # retry grid / fallbacks around EB
+
+  conformal/
+    __init__.py
+    scores.py         # monotone V(x,y;c) (binary/regression)
+    pvalues.py        # vectorized weighted ECDF → p-values (Eq. (2))
+
+  selection/
+    __init__.py
+    bh.py             # BH threshold
+    tp_min.py         # ≥K true positives
+    fp_budget.py      # ≤K false positives
+    posthoc.py        # top-K FDP estimate
+
+  utils/
+    __init__.py
+    checks.py         # input validation (shapes, NaNs)
+    rng.py            # seeded RNG for tie-breaking
+    typing.py         # type aliases / dataclasses
+
+examples/
+  01_quickstart.ipynb
+  02_enamine_hts.ipynb
