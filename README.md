@@ -1,5 +1,5 @@
 
-<!-- 
+
 <table border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td width="30%">
@@ -11,18 +11,11 @@
       <h1>Controlling False Discoveries <br> in AI-Driven Therapeutic Discovery</h1>  
     </td>
   </tr>
-</table> -->
-
-<div style="display:flex; align-items:center; gap:1.5rem;">
-  <img src="logo.jpg" alt="TxConformal logo" width="200">
-  <div>
-    <h1 style="margin:0;">Controlling False Discoveries<br>in AI-Driven Therapeutic Discovery</h1> 
-  </div>
-</div>
+</table>
+ 
 
  <p style="margin-top: 0px; margin-bottom: 35px;"></p> 
-
- ---
+ 
 
 This repository hosts softwares and reproduction codes for the paper:
 
@@ -31,6 +24,18 @@ This repository hosts softwares and reproduction codes for the paper:
 Ying Jin*, Kexin Huang*, Nathaniel Diamant, Kerry R. Buchholz, Steven T. Rutherford, Nicholas Skelton, Tommaso Biancalani, Gabriele Scalia, Jure Leskovec, and Emmanuel J. Candès
  
 ---
+
+## Overview 
+
+AI models empower therapeutic discovery by predicting properties to prioritize drug candidates for experimental validation. The success of this process hinges on the quality of prioritized candidates: Errors at this stage can lead to significant waste of resources, highlighting the need for proper error control before seeing the results in future experiments. This selection problem spans various drug discovery modalities, including CRISPR perturbation, DNA sequences, small molecules, proteins, and clinical trials. 
+
+<span style="font-family:Courier,monospace;">TxConformal</span> is a versatile framework that addresses key selection challenges, such as determining the number of candidates needed to ensure a desired success rate, estimating false positives in a selected subset, and setting tolerable error thresholds. Combining conformal selection and balancing weights, <span style="font-family:Courier,monospace;">TxConformal</span> begins with predictions from AI models, adjusts for distribution shifts between exsiting campaigns and the future candidate pool, builds confidence measures for true positives in new candidates, and decide which candidates to select with control of false discovery metrics. 
+
+<p align="center">
+  <img src="overview.jpg" alt="TxConformal overview" width="600">
+</p>
+
+
 
 ## 1. Quick start & general usage
 
@@ -138,3 +143,6 @@ prov.set_soft_block(custom_phi_c, custom_phi_t)
 - `print_level = 0` prints one line per retry attempt.
 - Larger values show every EB iteration/residual—useful when debugging convergence issues.
 
+# Contact 
+
+For any questions, please raise an issue in the GitHub or contact Ying Jin (yjinstat[at]wharton.upenn.edu).

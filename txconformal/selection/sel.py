@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 
 def bh_threshold(p: np.ndarray, alpha: float):
     m = p.size
@@ -36,8 +37,20 @@ def tp_min_threshold(p: np.ndarray, K: int):
     return float(ps[k]), order[:k+1]
 
 
-def estimate_topk_fp(p: np.ndarray, K: int):
+def estimate_topk_fp(p: np.ndarray, K: int, CI: bool = False, 
+                     w_cal: np.ndarray = None, hat_mu_cal: np.ndarray = None, hat_mu_test: np.ndarray = None):
     order = np.sort(p, kind="mergesort")
     kth = order[K-1]
     est_fp = len(p) * kth / K
-    return float(est_fp)
+
+    if CI:
+        df = pd.DataFrame({'p': p, 'hat_mu_test': hat_mu_test})
+        df.sort_values('p', inplace=True)
+        threshold = df.iloc[K-1]['hat_mu_test']
+        std_cal = np.std(w_cal * (1*(hat_mu_cal >= threshold )- K /len(hat_mu_test)) ) * len(hat_mu_test) / K /np.sqrt(len(w_cal))
+        std_test = np.sqrt(est_fp * K * (1- est_fp * K/ len(p)))
+        std_both = np.sqrt(std_cal**2 + std_test**2)
+        ci_low = est_fp  - 1.6 * std_both / K 
+        ci_high = est_fp  + 1.6 * std_both / K
+
+    return float(est_fp), (ci_low, ci_high) if CI else float(est_fp)

@@ -28,6 +28,7 @@ class SelectionResult:
     weights_calib: np.ndarray
     meta: Dict[str, Any]
     fdp_est: float
+    fdp_est_CI: Optional[Tuple[float, float]] = None
 
 
 # ---------------- main API ----------------
@@ -73,6 +74,8 @@ class TxConformal:
         self._weights_calib: Optional[np.ndarray] = None
         self._meta: Dict[str, Any] = {}
         self._fitted = False
+        self._f_calib_raw = None
+        self._f_test_raw = None
 
     # ---------- helpers ----------
     @staticmethod
@@ -117,10 +120,7 @@ class TxConformal:
     ) -> Tuple[np.ndarray, Dict[str, Any]]:
         
         n_cal = prov.f_calib.shape[0] 
-        # has_embeddings = (getattr(prov, "E_calib", None) is not None) or (getattr(prov, "embed_fn", None) is not None)
-        # # special case: no embeddings AND user explicitly requests (f, bins)
-        # if (not has_embeddings) and (self.force_mode in ("pred_bin", "f+bins")):
-            # Fc, Ft = prov.get_block(mode="f+bins")
+        
         Xc, Xt = prov.get_soft_block() 
         Fc, Ft = prov.get_force_block()
         bc, bt = prov.get_backup_block() 
@@ -153,6 +153,10 @@ class TxConformal:
 
         Returns self for chaining.
         """ 
+
+        # store scores 
+        self._f_calib_raw = np.asarray(prov.f_calib, float).copy()
+        self._f_test_raw = np.asarray(prov.f_test, float).copy()
         # obtain weights
         if weight:
             w_cal, eb_meta = self._weights_from_provider(prov, print_level=print_level)
@@ -239,7 +243,7 @@ class TxConformal:
             k = min(int(K), p_sel.size)
             idx = order[:k]
             thr = float(p_sel[idx[-1]]) if k > 0 else 0.0
-            est = estimate_topk_fp(p_sel, int(K)) 
+            est, fdp_CI = estimate_topk_fp(p_sel, int(K), CI=True, w_cal=w_cal, hat_mu_cal=self._f_calib_raw, hat_mu_test=self._f_test_raw) # estimated FDP and CI 
         else:
             raise ValueError(f"Unknown method: {method}")
  
@@ -249,6 +253,7 @@ class TxConformal:
             idx=idx,
             threshold=float(thr),
             fdp_est = est,
+            fdp_est_CI = fdp_CI if meth == 'top_k' else None,
             p_values=p_indiv,
             p_sel=p_sel,
             weights_calib=w_cal,
