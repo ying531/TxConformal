@@ -1,5 +1,5 @@
 
-
+<!-- 
 <table border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td width="30%">
@@ -11,9 +11,18 @@
       <h1>Controlling False Discoveries <br> in AI-Driven Therapeutic Discovery</h1>  
     </td>
   </tr>
-</table>
+</table> -->
 
+<div style="display:flex; align-items:center; gap:1.5rem;">
+  <img src="logo.jpg" alt="TxConformal logo" width="200">
+  <div>
+    <h1 style="margin:0;">Controlling False Discoveries<br>in AI-Driven Therapeutic Discovery</h1> 
+  </div>
+</div>
 
+ <p style="margin-top: 0px; margin-bottom: 35px;"></p> 
+
+ ---
 
 This repository hosts softwares and reproduction codes for the paper:
 
@@ -128,5 +137,4 @@ prov.set_soft_block(custom_phi_c, custom_phi_t)
 - `print_level = -1` (default in examples) silences intermediate logs and numpy warnings.
 - `print_level = 0` prints one line per retry attempt.
 - Larger values show every EB iteration/residual—useful when debugging convergence issues.
-
 
