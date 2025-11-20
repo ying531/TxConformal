@@ -1,5 +1,9 @@
 # TxConformal: Controlling False Discoveries in AI-Driven Therapeutic Discovery
 
+<p align="center">
+  <img src="./txconformal_logo.jpg" alt="TxConformal logo" width="200">
+</p>
+
 This repository hosts softwares and reproduction codes for the paper:
 
 **TxConformal: Controlling False Discoveries in AI-Driven Therapeutic Discovery**
@@ -39,9 +43,23 @@ res = txc.select(method="bh", alpha=0.1)            # BH selection for FDR contr
 print("selected indices:", res.idx)
 print("threshold:", res.threshold)
 ```
- 
+---
 
-### General workflow
+## 2. Demo notebooks 
+
+| Scenario | Notebook | Content |
+| --- | --- | --- |
+| ADMET / general tasks | `examples/general_tasks.ipynb` | Example usage for other selection scenarios in ADMET dataset, including FDR control, maximum false positives, minimum true positives, and FDP estimation. |
+| Protein stability | `examples/protein_stability.ipynb` | Example usage for protein stability prediction task (regression problem) with FDR control. | 
+| Enamine HTS screening | `examples/enamine.ipynb` | Reproduces the HTS Enamine prospective deployment (after diversity filtering): customized features, FDP estimates for top-ranked compounds. |
+
+Each notebook presents required inputs (predictions, embeddings, cutoffs), how to configure `FeaturesProvider`, and how to interpret the TxConformal outputs for that scenario.
+
+---
+
+### 3. Advanced usage 
+
+#### General workflow
 
 - Step 1: prepare balancing features for calibration and test data via **FeaturesProvider**. 
   By default `prepare()` builds:
@@ -49,7 +67,7 @@ print("threshold:", res.threshold)
   - Force block `[f, pooled bins]` (or fallback to `f` if embeddings are absent): forcing balance for these features
   - Backup block `[ [f, pooled bins], [f] ]`: fallback options when balancing soft and force blocks are not feasible
   
-  :bulb: *Customize* your balancing features via `.set_soft_block()` / `.set_force_block()` / `.set_backup_block()`.
+  > :bulb: *Customize* your balancing features via `.set_soft_block()` / `.set_force_block()` / `.set_backup_block()`. (See below)
 - Step 2: Fit weights and construct p-values via **TxConformal**. 
   It asks for cutoff (so Y_test>cutoff is a true discovery), computes conformity scores, and converts them to weighted p-values.
 - Step 3: Perform **Selection** by calling `.select()`. It supports several discovery tasks:
@@ -69,19 +87,8 @@ The output of `.select()` is a `SelectionResult` object containing:
   - `provider_meta`: dimensional summary of bins/embeddings produced during `prepare()`.
 
  
-### Example usage notebooks 
 
-| Scenario | Notebook | Content |
-| --- | --- | --- |
-| ADMET / general tasks | `examples/general_tasks.ipynb` | Example usage for other selection scenarios in ADMET dataset, including FDR control, maximum false positives, minimum true positives, and FDP estimation. |
-| Protein stability | `examples/protein_stability.ipynb` | Example usage for protein stability prediction task (regression problem) with FDR control. | 
-| Enamine HTS screening | `examples/enamine.ipynb` | Reproduces the HTS Enamine prospective deployment (after diversity filtering): customized features, FDP estimates for top-ranked compounds. |
 
-Each notebook presents required inputs (predictions, embeddings, cutoffs), how to configure `FeaturesProvider`, and how to interpret the TxConformal outputs for that scenario.
-
----
-
-### 3. Advanced usage 
 
 #### Customizing feature blocks
 
