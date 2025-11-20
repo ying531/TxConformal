@@ -1,15 +1,11 @@
 
 
-<table>
-  <tr>
-    <td width="30%">
-      <img src="logo.jpg" alt="TxConformal logo" width="220">
-    </td>
-    <td>
-      <h1>Controlling False Discoveries in AI-Driven Therapeutic Discovery</h1> 
-    </td>
-  </tr>
-</table>
+<div style="display:flex; align-items:center; gap:2rem;">
+  <img src="logo.jpg" alt="TxConformal logo" width="200">
+  <div>
+    <h1>TxConformal: Controlling False Discoveries in AI-Driven Therapeutic Discovery</h1> 
+  </div>
+</div>
 
 This repository hosts softwares and reproduction codes for the paper:
 
