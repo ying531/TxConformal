@@ -81,7 +81,7 @@ Each notebook presents required inputs (predictions, embeddings, cutoffs), how t
 
 ---
 
-### 3. Advanced usage 
+## 3. Advanced usage 
 
 #### General workflow
 
@@ -143,6 +143,6 @@ prov.set_soft_block(custom_phi_c, custom_phi_t)
 - `print_level = 0` prints one line per retry attempt.
 - Larger values show every EB iteration/residual—useful when debugging convergence issues.
 
-# Contact 
+## Contact 
 
 For any questions, please raise an issue in the GitHub or contact Ying Jin (yjinstat[at]wharton.upenn.edu).
