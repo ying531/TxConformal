@@ -6,7 +6,9 @@
       <img src="logo.jpg" alt="TxConformal logo" width="220">
     </td>
     <td>
+    <summary>
       <h1>Controlling False Discoveries in AI-Driven Therapeutic Discovery</h1> 
+      <summary>
     </td>
   </tr>
 </table>
