@@ -29,13 +29,13 @@ Ying Jin*, Kexin Huang*, Nathaniel Diamant, Kerry R. Buchholz, Steven T. Rutherf
 
 AI models empower therapeutic discovery by predicting properties to prioritize drug candidates for experimental validation. The success of this process hinges on the quality of prioritized candidates: Errors at this stage can lead to significant waste of resources, highlighting the need for proper error control before seeing the results in future experiments. This selection problem spans various drug discovery modalities, including CRISPR perturbation, DNA sequences, small molecules, proteins, and clinical trials. 
 
-<span style="font-family:Courier,monospace;">TxConformal</span> is a versatile framework that addresses key selection challenges, such as determining the number of candidates needed to ensure a desired success rate, estimating false positives in a selected subset, and setting tolerable error thresholds. Combining conformal selection and balancing weights, <span style="font-family:Courier,monospace;">TxConformal</span> begins with predictions from AI models, adjusts for distribution shifts between exsiting campaigns and the future candidate pool, builds confidence measures for true positives in new candidates, and decide which candidates to select with control of false discovery metrics. 
+**TxConformal** is a versatile framework that addresses key selection challenges, such as determining the number of candidates needed to ensure a desired success rate, estimating false positives in a selected subset, and setting tolerable error thresholds. Combining conformal selection and balancing weights, **TxConformal** begins with predictions from AI models, adjusts for distribution shifts between exsiting campaigns and the future candidate pool, builds confidence measures for true positives in new candidates, and decide which candidates to select with control of false discovery metrics. 
 
 <p align="center">
   <img src="overview.jpg" alt="TxConformal overview" width="600">
 </p>
 
-
+---
 
 ## 1. Quick start & general usage
 
