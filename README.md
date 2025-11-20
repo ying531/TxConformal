@@ -1,16 +1,22 @@
-# TxConformal: Controlling False Discoveries in AI-Driven Therapeutic Discovery
 
-<p align="center">
-  <img src="./txconformal_logo.jpg" alt="TxConformal logo" width="200">
-</p>
+
+<table>
+  <tr>
+    <td width="30%">
+      <img src="logo.jpg" alt="TxConformal logo" width="220">
+    </td>
+    <td>
+      <h1>Controlling False Discoveries in AI-Driven Therapeutic Discovery</h1> 
+    </td>
+  </tr>
+</table>
 
 This repository hosts softwares and reproduction codes for the paper:
 
 **TxConformal: Controlling False Discoveries in AI-Driven Therapeutic Discovery**
 
 Ying Jin*, Kexin Huang*, Nathaniel Diamant, Kerry R. Buchholz, Steven T. Rutherford, Nicholas Skelton, Tommaso Biancalani, Gabriele Scalia, Jure Leskovec, and Emmanuel J. Candès
-
-
+ 
 ---
 
 ## 1. Quick start & general usage
