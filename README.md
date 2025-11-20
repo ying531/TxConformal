@@ -3,15 +3,17 @@
 <table border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td width="30%">
+    <p align="center">
       <img src="logo.jpg" alt="TxConformal logo" width="220">
+      </p>
     </td>
-    <td>
-    <summary>
-      <h1>Controlling False Discoveries in AI-Driven Therapeutic Discovery</h1> 
-      <summary>
+    <td> 
+      <h1>Controlling False Discoveries <br> in AI-Driven Therapeutic Discovery</h1>  
     </td>
   </tr>
 </table>
+
+
 
 This repository hosts softwares and reproduction codes for the paper:
 
