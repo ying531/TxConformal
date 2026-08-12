@@ -17,7 +17,7 @@
  <p style="margin-top: 0px; margin-bottom: 35px;"></p> 
  
 
-This repository hosts software and reproduction code for the paper:
+This repository hosts software and reproduction code for the paper [[link](https://www.biorxiv.org/content/10.64898/2026.04.27.721076v1)]:
 
 **TxConformal: Controlling False Discoveries in AI-Driven Therapeutic Discovery**
 
