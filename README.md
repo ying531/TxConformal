@@ -17,7 +17,7 @@
  <p style="margin-top: 0px; margin-bottom: 35px;"></p> 
  
 
-This repository hosts softwares and reproduction codes for the paper:
+This repository hosts software and reproduction code for the paper:
 
 **TxConformal: Controlling False Discoveries in AI-Driven Therapeutic Discovery**
 
@@ -29,7 +29,12 @@ Ying Jin*, Kexin Huang*, Nathaniel Diamant, Kerry R. Buchholz, Steven T. Rutherf
 
 AI models empower therapeutic discovery by predicting properties to prioritize drug candidates for experimental validation. The success of this process hinges on the quality of prioritized candidates: Errors at this stage can lead to significant waste of resources, highlighting the need for proper error control before seeing the results in future experiments. This selection problem spans various drug discovery modalities, including CRISPR perturbation, DNA sequences, small molecules, proteins, and clinical trials. 
 
-**TxConformal** is a versatile framework that addresses key selection challenges, such as determining the number of candidates needed to ensure a desired success rate, estimating false positives in a selected subset, and setting tolerable error thresholds. Combining conformal selection and balancing weights, **TxConformal** begins with predictions from AI models, adjusts for distribution shifts between exsiting campaigns and the future candidate pool, builds confidence measures for true positives in new candidates, and decide which candidates to select with control of false discovery metrics. 
+**TxConformal** combines conformal selection with balancing weights for candidate
+prioritization under covariate shift. It uses predictions and model-derived
+features to balance calibration and candidate pools, constructs weighted
+conformal p-values, and pairs them with selection rules for several experimental
+objectives. See the paper for the assumptions and scope of the corresponding
+statistical statements.
 
 <p align="center">
   <img src="overview.jpg" alt="TxConformal overview" width="600">
@@ -59,8 +64,8 @@ prov = FeaturesProvider(f_calib=f_cal, f_test=f_test,
 prov.prepare()                     # using default feature setup for TxConformal
 
 # Step 2: TxConformal: build weights, p-values, and selection
-txc = TxConformal(score_name="clip", cutoff=0.5)   # cutoff specifies Y_test > 0.5 as meaningful discovery
-txc.fit(prov, y_calib, print_level=-1)   # suppresses EB logs
+txc = TxConformal(score_name="clip")
+txc.fit(prov, y_calib, cutoff=0.5, print_level=-1)
 res = txc.select(method="bh", alpha=0.1)            # BH selection for FDR control
 
 # Inspect results
@@ -73,7 +78,7 @@ print("threshold:", res.threshold)
 
 | Scenario | Notebook | Content |
 | --- | --- | --- |
-| ADMET / general tasks | `examples/general_tasks.ipynb` | Example usage for other selection scenarios in ADMET dataset, including FDR control, maximum false positives, minimum true positives, and FDP estimation. |
+| ADMET / general tasks | `examples/general_tasks.ipynb` | Example usage for diverse selection scenarios in ADMET dataset, including FDR control, maximum false positives, minimum true positives, and FDP estimation. |
 | Protein stability | `examples/protein_stability.ipynb` | Example usage for protein stability prediction task (regression problem) with FDR control. | 
 | Enamine HTS screening | `examples/enamine.ipynb` | Reproduces the HTS Enamine prospective deployment (after diversity filtering): customized features, FDP estimates for top-ranked compounds. |
 
@@ -92,23 +97,34 @@ Each notebook presents required inputs (predictions, embeddings, cutoffs), how t
   - Backup block `[ [f, pooled bins], [f] ]`: fallback options when balancing soft and force blocks are not feasible
   
   > :bulb: *Customize* your balancing features via `.set_soft_block()` / `.set_force_block()` / `.set_backup_block()`. (See below)
-- Step 2: Fit weights and construct p-values via **TxConformal**. 
-  It asks for cutoff (so Y_test>cutoff is a true discovery), computes conformity scores, and converts them to weighted p-values.
+- Step 2: Fit weights and construct p-values via **TxConformal**.
+  `cutoff` defines the outcome threshold (for example, `Y_test > 0.5`).
+  Candidate-specific test weights can be supplied with `w_test`. Setting
+  `candidate_weight_mode="log_linear"` extrapolates them from the final
+  entropy-balancing design, as in the Enamine deployment notebook. The default
+  `"uniform"` mode preserves the previous package behavior.
 - Step 3: Perform **Selection** by calling `.select()`. It supports several discovery tasks:
   - `method='bh'`: Benjamini-Hochberg procedure with FDR control below `alpha`
   - `method='fp_budget`: Selecting as many as possible while keeping false discoveries below `K`
   - `method='tp_min`: Selecting as few as possible with true positives above `K` (unless all selected)
-  - `method='top_k`: Selecting top-`K` units with strongest p-values with FDP estimate
+  - `method='top_k'`: Selecting the `K` smallest p-values and returning point estimates of the false-positive count and FDP
 
 
 The output of `.select()` is a `SelectionResult` object containing:
 - `idx`: indices of selected test units.
 - `threshold`: threshold of selection on p-values.
-- `fdp_est`: estimated FDP among selected units. 
+- `weights_calib` and `weights_test`: weights used in the p-value calculation.
+- `fp_count_est`: estimated number of false positives for `method='top_k'`.
+- `fdp_est`: estimated FDP for `method='top_k'` (and the method-specific summary for other rules).
 - `meta`: collects meta-data, including 
   - `eb_meta`: successful entropy-balancing configuration (PCA bounds, tolerance, fallback info).
   - `score_meta`: which score function (`clip`, `residual`, etc.) and its hyperparameters.
   - `provider_meta`: dimensional summary of bins/embeddings produced during `prepare()`.
+
+The package returns point estimates for `method='top_k'`; it does not provide a
+generic confidence interval. The Enamine notebook retains the historical
+application-specific normal approximation for reproducibility and labels it
+separately from package output.
 
  
 
@@ -141,7 +157,7 @@ prov.set_soft_block(custom_phi_c, custom_phi_t)
 
 - `print_level = -1` (default in examples) silences intermediate logs and numpy warnings.
 - `print_level = 0` prints one line per retry attempt.
-- Larger values show every EB iteration/residual—useful when debugging convergence issues.
+- Larger values show every EB iteration/residual; this may be useful when debugging convergence issues.
 
 ## Contact 
 
